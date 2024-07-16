@@ -1,15 +1,16 @@
-import React from 'react';
+import React from "react";
 
-import styles from './EventForm.module.scss';
-import { useNavigate, Form, redirect } from 'react-router-dom';
-import { EVENT_URL } from '../config/host-config';
+import styles from "./EventForm.module.scss";
+import { useNavigate, Form, redirect } from "react-router-dom";
+import { EVENT_URL } from "../config/host-config";
+import { getUserToken } from "../config/auth";
 
 const EventForm = ({ method, event = {} }) => {
   const {
     title,
     desc: description,
-    'img-url': image,
-    'start-date': date,
+    "img-url": image,
+    "start-date": date,
   } = event;
 
   // 날짜 형식을 변경 (yyyy-MM-dd)
@@ -18,10 +19,10 @@ const EventForm = ({ method, event = {} }) => {
    * @param date - yyyy년 MM월 dd일
    */
   const convertDateFormat = (date) => {
-    const [yearPart, monthDayPart] = date.split('년 ');
-    const [monthPart, dayPart] = monthDayPart.split('월 ');
+    const [yearPart, monthDayPart] = date.split("년 ");
+    const [monthPart, dayPart] = monthDayPart.split("월 ");
 
-    const day = dayPart.replace('일', '');
+    const day = dayPart.replace("일", "");
 
     // console.log('date: ', { yearPart, monthPart, day });
 
@@ -39,7 +40,7 @@ const EventForm = ({ method, event = {} }) => {
   const cancelHandler = (e) => {
     // window.location.href = '/events/' + id;
     // navigate('/events/' + id);
-    navigate('..');
+    navigate("..");
   };
 
   // const submitHandler = e => {
@@ -91,7 +92,7 @@ const EventForm = ({ method, event = {} }) => {
           type="text"
           name="title"
           required
-          defaultValue={event ? title : ''}
+          defaultValue={event ? title : ""}
         />
       </p>
       <p>
@@ -101,7 +102,7 @@ const EventForm = ({ method, event = {} }) => {
           type="url"
           name="image"
           required
-          defaultValue={event ? image : ''}
+          defaultValue={event ? image : ""}
         />
       </p>
       <p>
@@ -111,7 +112,7 @@ const EventForm = ({ method, event = {} }) => {
           type="date"
           name="date"
           required
-          defaultValue={event ? formatDate : ''}
+          defaultValue={event ? formatDate : ""}
         />
       </p>
       <p>
@@ -121,24 +122,20 @@ const EventForm = ({ method, event = {} }) => {
           name="description"
           rows="5"
           required
-          defaultValue={event ? description : ''}
+          defaultValue={event ? description : ""}
         />
       </p>
       <div className={styles.actions}>
-        <button
-          type="button"
-          onClick={cancelHandler}
-        >
+        <button type="button" onClick={cancelHandler}>
           Cancel
         </button>
-        <button>{method === 'post' ? 'Save' : 'Modify'}</button>
+        <button>{method === "post" ? "Save" : "Modify"}</button>
       </div>
     </Form>
   );
 };
 
 export default EventForm;
-
 
 // 서버에 갱신요청을 보내는 트리거함수
 // App.js에서 router에 설정
@@ -153,29 +150,29 @@ export const action = async ({ request, params }) => {
   // console.log(formData);
 
   const payload = {
-    title: formData.get('title'),
-    desc: formData.get('description'),
-    imageUrl: formData.get('image'),
-    beginDate: formData.get('date'),
+    title: formData.get("title"),
+    desc: formData.get("description"),
+    imageUrl: formData.get("image"),
+    beginDate: formData.get("date"),
   };
 
   // console.log(payload);
 
   let url = EVENT_URL;
-  if (request.method === 'PATCH') {
+  if (request.method === "PATCH") {
     url += `/${params.eventId}`;
   }
 
-  console.log('info: ', { url, method: request.method });
+  console.log("info: ", { url, method: request.method });
 
   const response = await fetch(url, {
     method: request.method,
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + getUserToken(),
     },
     body: JSON.stringify(payload),
   });
 
-  return redirect('/events');
-
+  return redirect("/events");
 };

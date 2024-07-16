@@ -1,19 +1,22 @@
 import React from "react";
-import { useLoaderData, useRouteLoaderData } from "react-router-dom";
+import { redirect, useLoaderData, useRouteLoaderData } from "react-router-dom";
 import EventItem from "../components/EventItem";
-import { redirect } from "react-router-dom";
 import { EVENT_URL } from "../config/host-config";
+import { getUserToken } from "../config/auth";
 
 const EventDetail = () => {
-  // const ev = useLoaderData();
-  const ev = useRouteLoaderData("event-detail");
+  // 사용범위가 본인컴포넌트와 그 하위 컴포넌트(children은 하위가 아님)
+  // const ev = useLoaderData(); // 자신의 loader를 불러옴
+
+  const ev = useRouteLoaderData("event-detail"); // 부모의 loader를 불러오는 훅
+
   return <EventItem event={ev} />;
 };
 
 export default EventDetail;
 
 export const loader = async ({ params }) => {
-  const { prodId: id } = params;
+  const { eventId: id } = params;
 
   // console.log('abc: ', abc.params.eventId);
 
@@ -21,7 +24,10 @@ export const loader = async ({ params }) => {
   // const { eventId: id } = useParams();
   // const [ev, setEv] = useState({});
 
-  const response = await fetch(`${EVENT_URL}/${id}`);
+  const response = await fetch(`${EVENT_URL}/${id}`, {
+    method: "GET",
+    headers: { Authorization: "Bearer " + getUserToken() },
+  });
 
   if (!response.ok) {
     // ... 예외처리
@@ -31,19 +37,17 @@ export const loader = async ({ params }) => {
   // console.log('json: ', json);
 };
 
-export const action = async (abc) => {
-  // action 함수를 트리거하는 방법
-  // 1. form이 있는 EventFormㄴ으로 이동
-  const id = abc.params.prodId;
-
-  // const formData = await request.formData();
-  // // console.log(formData);
-
-  // // console.log(payload);
-  if (!window.confirm("정말 삭제하시겠어요?")) return;
-  await fetch(`${EVENT_URL}/${id}`, {
+// action을 트리거 하는 방법
+// 실제로 버튼이 있는 곳(EventItem.js)으로 이동
+export const action = async ({ params }) => {
+  const response = await fetch(`${EVENT_URL}/${params.eventId}`, {
     method: "DELETE",
+    headers: { Authorization: "Bearer " + getUserToken() },
   });
+
+  if (!response.ok) {
+    //...
+  }
 
   return redirect("/events");
 };
