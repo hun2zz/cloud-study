@@ -1,8 +1,10 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useRouteLoaderData } from "react-router-dom";
 import styles from "./MainNavigation.module.scss";
 
 const MainNavigation = () => {
+  const userData = useRouteLoaderData("user-data");
+  // console.log(userData);
   const activeFn = ({ isActive }) => {
     // NavLink 컴포넌트에 className 프롭스에 함수를 전달하면
     // 첫 번째 파라미터에 어떤 객체정보를 준다.
@@ -22,6 +24,9 @@ const MainNavigation = () => {
             <NavLink to="events" className={activeFn}>
               Events
             </NavLink>
+          </li>
+          <li>
+            {userData && <button style={{ width: "100%" }}>LogOut</button>}
           </li>
         </ul>
       </nav>

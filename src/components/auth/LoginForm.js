@@ -67,5 +67,5 @@ export const loginAction = async ({ request }) => {
 
   //브라웆 ㅓ저장소 ( localStorage : 쿠키, sessionStorage : 세션)
   localStorage.setItem("userData", JSON.stringify(responseData));
-  // return redirect("/sign-up");
+  return redirect("/");
 };
