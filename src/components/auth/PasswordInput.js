@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./SignUpForm.module.scss";
 
-const PasswordInput = ({ email }) => {
+const PasswordInput = ({ onSuccess }) => {
   const passwordRef = useRef();
 
   const [password, setPassword] = useState("");
@@ -21,11 +21,13 @@ const PasswordInput = ({ email }) => {
     if (validatePassword(newPassword)) {
       setPasswordValid(true);
       setErrorMessage("");
+      onSuccess(newPassword, true);
     } else {
       setPasswordValid(false);
       setErrorMessage(
         "비밀번호는 8자 이상이며, 숫자, 문자, 특수문자를 모두 포함해야 합니다."
       );
+      onSuccess(newPassword, false);
     }
   };
 

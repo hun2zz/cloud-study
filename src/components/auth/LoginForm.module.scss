@@ -1,19 +1,22 @@
-
 .form {
   max-width: 40rem;
   margin: 2rem auto;
-  
+
   label {
     text-align: left;
   }
 
-  label, input, button, a {
+  label,
+  input,
+  button,
+  a {
     display: block;
     width: 70%;
     margin: 0 auto;
   }
 
-  input, textarea {
+  input,
+  textarea {
     font: inherit;
     padding: 0.25rem;
   }
@@ -50,4 +53,7 @@
       color: var(--color-primary-700);
     }
   }
+}
+.error {
+  color: red;
 }
