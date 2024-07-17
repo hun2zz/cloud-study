@@ -19,4 +19,5 @@ const EVENT = "/events";
 const AUTH = "/auth";
 
 export const EVENT_URL = API_BASE_URL + EVENT;
+
 export const AUTH_URL = API_BASE_URL + AUTH;
