@@ -17,12 +17,12 @@ const MainNavigation = () => {
         <ul className={styles.list}>
           <li>
             <NavLink to="" className={activeFn} end>
-              Home
+              홈
             </NavLink>
           </li>
           <li>
             <NavLink to="events" className={activeFn}>
-              Events
+              이벤트
             </NavLink>
           </li>
           <li>
